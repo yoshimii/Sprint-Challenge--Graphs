@@ -1,6 +1,7 @@
 from room import Room
 from player import Player
 from world import World
+from util import Stack, Queue
 
 import random
 from ast import literal_eval
@@ -29,8 +30,50 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+"""
+1. Translate the problem into graph terminology:
+Travel to random unvisited rooms until I reach a dead end, 
+then, find the shortest path to the next unvisited room,
+each step as I go.
+"""
+# 2. Build your graph
+ 
+# Create an empty stack
+s = Stack()
+# Create an empty dictionary to store visited nodes and their directions
+visited = {}
+# Push starting node onto the stack
+s.push( [player.current_room.id] )
 
-
+# While there is more than one room to visit (not a dead end)
+while len(player.current_room.get_exits()) is not 1:
+    # Pop room from top of stack
+    r = s.pop()
+    print('~~~~~~~~~~', r)
+    r1 = r[-1]
+    print('*************', r1)
+    # Check if it's visited. If not...
+    if r1 not in visited:
+        # Mark it as visited
+        visited[r1] = {} # visited = { 0: {} }
+        # Store all possible directions in room key value ex: visited = { 0: { 'n': '?', 's': '?', 'w': '?', 'e': '?'} }
+        for direction in player.current_room.get_exits():
+            visited[r1][direction] = '?' # 'n' : '?'
+        d = random.choice(list(visited[player.current_room.id].keys()))# Generate a random available direction from room directions dictionary
+        player.travel(d) # Move player in that direction
+        traversal_path.append(d) # Add move to traversal path
+        # TODO: HELPER FUNCTION TO UPDATE VISITED ROOMS IN ADJACENCY DICTIONARIES FROM '?' TO DIRECTION
+        # Push current room onto stack
+        s.push([player.current_room.id])
+    else:
+        d = random.choice(list(visited[player.current_room.id].keys()))# Generate a random available direction from room directions dictionary
+        player.travel(d) # Move player in that direction
+        traversal_path.append(d) # Add move to traversal path
+        # TODO: HELPER FUNCTION TO UPDATE VISITED ROOMS IN ADJACENCY DICTIONARIES FROM '?' TO DIRECTION
+        # Push current room onto stack
+        s.push([player.current_room.id])
+print(player.current_room.id)
+print('TRAVERSAL PATH: ',traversal_path)
 # TRAVERSAL TEST
 visited_rooms = set()
 player.current_room = world.starting_room

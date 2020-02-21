@@ -46,7 +46,7 @@ visited = {}
 s.push( [player.current_room.id] )
 
 # While there is more than one room to visit (not a dead end)
-while len(player.current_room.get_exits()) is not 1:
+while len(player.current_room.get_exits()) != 1:
     # Pop room from top of stack
     r = s.pop()
     print('~~~~~~~~~~', r)
@@ -66,6 +66,15 @@ while len(player.current_room.get_exits()) is not 1:
         # Push current room onto stack
         s.push([player.current_room.id])
     else:
+        rooms_not_visited = []
+        print('KEYS', list(visited[player.current_room.id].keys()))
+        for i in list(visited[player.current_room.id].keys()):
+            if visited[player.current_room.id][i] == '?':
+                print('I', visited[player.current_room.id][i])
+                rooms_not_visited.append(i)
+        print(rooms_not_visited)
+        print('YOU CAN VISIT THIS ROOM', list(visited[player.current_room.id].values()))
+        
         d = random.choice(list(visited[player.current_room.id].keys()))# Generate a random available direction from room directions dictionary
         player.travel(d) # Move player in that direction
         traversal_path.append(d) # Add move to traversal path

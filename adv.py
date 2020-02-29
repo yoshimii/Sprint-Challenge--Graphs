@@ -77,13 +77,7 @@ def dft_maze_traversal(current_room):
         if current_room == player.current_room.id:
             move(return_opposites(direction))
                       
-dft_maze_traversal(player.current_room.id)
-                
-                # Get id
-                # Get exits, previous room, current room, 
-                # Update visited
-                # 
-                
+dft_maze_traversal(player.current_room.id)                
 
 # TRAVERSAL TEST
 visited_rooms = set()
